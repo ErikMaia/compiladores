@@ -1,0 +1,253 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options
+{
+  static = true;
+}
+
+PARSER_BEGIN(langJavaSh)
+package cc;
+public class langJavaSh
+{
+  public static void main(String args []) throws ParseException
+  {
+    langJavaSh parser = new langJavaSh(System.in);
+    while (true)
+    {
+      System.out.println("Reading from standard input...");
+      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");
+      try
+      {
+        switch (langJavaSh.one_line())
+        {
+          case 0 : 
+          System.out.println("OK.");
+          break;
+          case 1 : 
+          System.out.println("Goodbye.");
+          break;
+          default : 
+          break;
+        }
+      }
+      catch (Exception e)
+      {
+        System.out.println("NOK.");
+        System.out.println(e.getMessage());
+        langJavaSh.ReInit(System.in);
+      }
+      catch (Error e)
+      {
+        System.out.println("Oops.");
+        System.out.println(e.getMessage());
+        break;
+      }
+    }
+  }
+}
+
+PARSER_END(langJavaSh)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < INCREMENT: "++" >
+| < DECREMENT: "--" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+| < MATH :
+    (
+      < PLUS >
+    | < MINUS >
+    | < MULTIPLY >
+    | < DIVIDE >
+    ) >
+| < And : "&&" >
+| < Or : "||" >
+| < LogicalDigital :
+    < And >
+  | < Or > >
+| < Equal : "==" >
+| < Diferent : "!=" >
+| < Atribute : "=" >
+| < Above : ">" >
+| < AboveEqual : ">=" >
+| < Lower : "<" >
+| < LowerEqual : "<=" >
+| < LogicalMathOperator :
+    < Equal >
+  | < Above >
+  | < AboveEqual >
+  | < Lower >
+  | < LowerEqual > >
+}
+
+TOKEN :
+{
+  < CONSTANT : (< DIGIT >)+ >
+| < LOGICALCONSTANT :
+    "true"
+  | "false" >
+| < DIGIT : [ "0"-"9" ] >
+| < CHAR : ([ "a"-"z" ] [ "A"-"Z" ])+ >
+| < Int : "int" >
+| < Float : "float" >
+| < String : "string" >
+| < Bool : "bool" >
+| < Type :
+    < Int >
+  | < Float >
+  | < String >
+  | < Bool > >
+| < Constructor : "constructor(" ") {" "}" >
+| < IdentVar : [ "a"-"z" ] (< CHAR >)* >
+| < IdentClass : [ "A"-"Z" ] (< CHAR >)* >
+}
+
+// Palavras reservadas
+TOKEN :
+{
+	  < While : "while" >
+| 	  < If : "if" >
+| 	  < Else : "else" >
+| 	  < For : "for" >
+| 	  < Do : "do" >
+}
+
+int one_line() :
+{}
+{
+  sum() ";"
+  {
+    return 0;
+  }
+| ";"
+  {
+    return 1;
+  }
+}
+
+void sum() :
+{}
+{
+  term()
+  (
+    (
+      < PLUS >
+    | < MINUS >
+    )
+    term()
+  )*
+}
+
+void term() :
+{}
+{
+  unary()
+  (
+    (
+      < MULTIPLY >
+    | < DIVIDE >
+    )
+    unary()
+  )*
+}
+
+void unary() :
+{}
+{
+  < MINUS > element()
+| element()
+}
+
+void element() :
+{}
+{
+  < CONSTANT >
+| "(" sum() ")"
+}
+
+void MathSta() :
+{}
+{
+	  (
+	    < IdentVar >
+  | < CONSTANT >
+	  )
+	  (< MATH > MathSta())*
+	}
+
+void LogicalSta() :
+{}
+{
+	  MathSta()
+	  < LogicalMathOperator > 
+	  MathSta()
+|(
+	    < LOGICALCONSTANT >
+  | < IdentVar >
+	  )
+	  (< LogicalDigital >(LogicalSta()))*
+	}
+
+void initVar() :
+{}
+{
+	  < Int > < IdentVar > ";"  code() < IdentVar > "=" MathSta() ";"
+	  < Bool > < IdentVar > ";" code() < IdentVar > "=" LogicalSta() ";"
+	  < Int > < IdentVar > "=" MathSta() ";"
+| 	< Bool > < IdentVar > "=" LogicalSta() ";"
+}
+
+void IfExpression() :
+{}
+{
+	  < If > "(" LogicalSta() ")" "{" 
+		  code() 
+	  "}"
+  (
+    < Else > " { " 
+		    code() 
+	    "}"
+  )?
+}
+
+void IncrementalExpression(): { } {
+	< IdentVar > (< DECREMENT > |< INCREMENT > )|
+	(< DECREMENT > |< INCREMENT > )< IdentVar >
+}
+
+void ForExpression() :
+{}
+{
+	  < For > "(" (initVar())? ";"(LogicalSta())?";"(IncrementalExpression())?"){"
+		code()
+	  " }"
+}
+
+void WhileExpretion(): { } {
+	< While > "("LogicalSta()") { "
+		code()
+	" }"
+}
+
+void code() :
+{}
+{
+	  (
+	    initVar()
+  		| IfExpression()
+		| ForExpression()
+		| WhileExpretion() 
+	  )*
+}

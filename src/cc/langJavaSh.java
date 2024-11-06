@@ -7,17 +7,17 @@ public class langJavaSh implements langJavaShConstants {
     langJavaSh parser = new langJavaSh(System.in);
     while (true)
     {
-      System.out.println("Reading from standard input...");
-      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");
+      System.out.println("Lendo a entrada padr\u00e3o");
+      System.out.print("class Classe {\n\tint numero = 6; \n}\n");
       try
       {
-        switch (langJavaSh.one_line())
+        switch (langJavaSh.ClassStruct())
         {
           case 0 :
           System.out.println("OK.");
           break;
           case 1 :
-          System.out.println("Goodbye.");
+          System.out.println("Sem Classe, porem ta ok");
           break;
           default :
           break;
@@ -42,14 +42,14 @@ public class langJavaSh implements langJavaShConstants {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case MINUS:
     case CONSTANT:
-    case 41:{
+    case 42:{
       sum();
-      jj_consume_token(40);
+      jj_consume_token(41);
 {if ("" != null) return 0;}
       break;
       }
-    case 40:{
-      jj_consume_token(40);
+    case 41:{
+      jj_consume_token(41);
 {if ("" != null) return 1;}
       break;
       }
@@ -133,7 +133,7 @@ public class langJavaSh implements langJavaShConstants {
       break;
       }
     case CONSTANT:
-    case 41:{
+    case 42:{
       element();
       break;
       }
@@ -150,10 +150,10 @@ public class langJavaSh implements langJavaShConstants {
       jj_consume_token(CONSTANT);
       break;
       }
-    case 41:{
-      jj_consume_token(41);
-      sum();
+    case 42:{
       jj_consume_token(42);
+      sum();
+      jj_consume_token(43);
       break;
       }
     default:
@@ -246,33 +246,37 @@ public class langJavaSh implements langJavaShConstants {
     case Int:{
       jj_consume_token(Int);
       jj_consume_token(IdentVar);
-      jj_consume_token(40);
+      jj_consume_token(41);
       code();
       jj_consume_token(IdentVar);
       jj_consume_token(Atribute);
       MathSta();
-      jj_consume_token(40);
-      jj_consume_token(Bool);
-      jj_consume_token(IdentVar);
-      jj_consume_token(40);
-      code();
-      jj_consume_token(IdentVar);
-      jj_consume_token(Atribute);
-      LogicalSta();
-      jj_consume_token(40);
-      jj_consume_token(Int);
-      jj_consume_token(IdentVar);
-      jj_consume_token(Atribute);
-      MathSta();
-      jj_consume_token(40);
+      jj_consume_token(41);
       break;
       }
     case Bool:{
       jj_consume_token(Bool);
       jj_consume_token(IdentVar);
+      jj_consume_token(41);
+      code();
+      jj_consume_token(IdentVar);
       jj_consume_token(Atribute);
       LogicalSta();
-      jj_consume_token(40);
+      jj_consume_token(41);
+      break;
+      }{
+      jj_consume_token(Int);
+      jj_consume_token(IdentVar);
+      jj_consume_token(Atribute);
+      MathSta();
+      jj_consume_token(41);
+      break;
+      }{
+      jj_consume_token(Bool);
+      jj_consume_token(IdentVar);
+      jj_consume_token(Atribute);
+      LogicalSta();
+      jj_consume_token(41);
       break;
       }
     default:
@@ -284,18 +288,18 @@ public class langJavaSh implements langJavaShConstants {
 
   static final public void IfExpression() throws ParseException {
     jj_consume_token(If);
-    jj_consume_token(41);
-    LogicalSta();
     jj_consume_token(42);
+    LogicalSta();
     jj_consume_token(43);
-    code();
     jj_consume_token(44);
+    code();
+    jj_consume_token(45);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case Else:{
       jj_consume_token(Else);
-      jj_consume_token(45);
+      jj_consume_token(46);
       code();
-      jj_consume_token(44);
+      jj_consume_token(45);
       break;
       }
     default:
@@ -352,7 +356,7 @@ public class langJavaSh implements langJavaShConstants {
 
   static final public void ForExpression() throws ParseException {
     jj_consume_token(For);
-    jj_consume_token(41);
+    jj_consume_token(42);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case Int:
     case Bool:{
@@ -363,7 +367,7 @@ public class langJavaSh implements langJavaShConstants {
       jj_la1[17] = jj_gen;
       ;
     }
-    jj_consume_token(40);
+    jj_consume_token(41);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CONSTANT:
     case LOGICALCONSTANT:
@@ -375,7 +379,7 @@ public class langJavaSh implements langJavaShConstants {
       jj_la1[18] = jj_gen;
       ;
     }
-    jj_consume_token(40);
+    jj_consume_token(41);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INCREMENT:
     case DECREMENT:
@@ -387,18 +391,47 @@ public class langJavaSh implements langJavaShConstants {
       jj_la1[19] = jj_gen;
       ;
     }
-    jj_consume_token(46);
-    code();
     jj_consume_token(47);
+    code();
+    jj_consume_token(48);
 }
 
   static final public void WhileExpretion() throws ParseException {
     jj_consume_token(While);
-    jj_consume_token(41);
+    jj_consume_token(42);
     LogicalSta();
-    jj_consume_token(48);
+    jj_consume_token(49);
     code();
-    jj_consume_token(47);
+    jj_consume_token(48);
+}
+
+  static final public int ClassStruct() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Class:{
+      jj_consume_token(Class);
+      jj_consume_token(IdentClass);
+      jj_consume_token(44);
+      code();
+      jj_consume_token(45);
+{if ("" != null) return 0;}
+      break;
+      }
+    case 0:
+    case Int:
+    case Bool:
+    case While:
+    case If:
+    case For:{
+      code();
+{if ("" != null) return 1;}
+      break;
+      }
+    default:
+      jj_la1[20] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
 }
 
   static final public void code() throws ParseException {
@@ -414,7 +447,7 @@ public class langJavaSh implements langJavaShConstants {
         break;
         }
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[21] = jj_gen;
         break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -436,11 +469,12 @@ public class langJavaSh implements langJavaShConstants {
         break;
         }
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
     }
+    jj_consume_token(0);
 }
 
   static private boolean jj_initialized_once = false;
@@ -453,7 +487,7 @@ public class langJavaSh implements langJavaShConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[22];
+  static final private int[] jj_la1 = new int[23];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -461,10 +495,10 @@ public class langJavaSh implements langJavaShConstants {
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x800100,0x120,0x120,0x600,0x600,0x800100,0x800000,0x800000,0x800,0x1000000,0x4000,0x1800000,0x48000000,0x0,0xc0,0xc0,0xc0,0x48000000,0x1800000,0xc0,0x48000000,0x48000000,};
+	   jj_la1_0 = new int[] {0x800100,0x120,0x120,0x600,0x600,0x800100,0x800000,0x800000,0x800,0x1000000,0x4000,0x1800000,0x48000000,0x0,0xc0,0xc0,0xc0,0x48000000,0x1800000,0xc0,0x48000001,0x48000000,0x48000000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x300,0x0,0x0,0x0,0x0,0x200,0x200,0x2,0x0,0x2,0x0,0x2,0x0,0x20,0x0,0x0,0x2,0x0,0x2,0x2,0x58,0x58,};
+	   jj_la1_1 = new int[] {0x600,0x0,0x0,0x0,0x0,0x400,0x400,0x4,0x0,0x4,0x0,0x4,0x0,0x40,0x0,0x0,0x4,0x0,0x4,0x4,0xb1,0xb0,0xb0,};
 	}
 
   /** Constructor with InputStream. */
@@ -485,7 +519,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -499,7 +533,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -516,7 +550,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -534,7 +568,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -550,7 +584,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -559,7 +593,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -610,12 +644,12 @@ public class langJavaSh implements langJavaShConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[49];
+	 boolean[] la1tokens = new boolean[50];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 22; i++) {
+	 for (int i = 0; i < 23; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -627,7 +661,7 @@ public class langJavaSh implements langJavaShConstants {
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 49; i++) {
+	 for (int i = 0; i < 50; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;

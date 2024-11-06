@@ -65,21 +65,23 @@ public interface langJavaShConstants {
   /** RegularExpression Id. */
   int Type = 31;
   /** RegularExpression Id. */
-  int Constructor = 32;
+  int Class = 32;
   /** RegularExpression Id. */
-  int IdentVar = 33;
+  int Constructor = 33;
   /** RegularExpression Id. */
-  int IdentClass = 34;
+  int IdentVar = 34;
   /** RegularExpression Id. */
-  int While = 35;
+  int IdentClass = 35;
   /** RegularExpression Id. */
-  int If = 36;
+  int While = 36;
   /** RegularExpression Id. */
-  int Else = 37;
+  int If = 37;
   /** RegularExpression Id. */
-  int For = 38;
+  int Else = 38;
   /** RegularExpression Id. */
-  int Do = 39;
+  int For = 39;
+  /** RegularExpression Id. */
+  int Do = 40;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -118,6 +120,7 @@ public interface langJavaShConstants {
     "\"string\"",
     "\"bool\"",
     "<Type>",
+    "\"class\"",
     "<Constructor>",
     "<IdentVar>",
     "<IdentClass>",

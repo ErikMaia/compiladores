@@ -15,17 +15,17 @@ public class langJavaSh
     langJavaSh parser = new langJavaSh(System.in);
     while (true)
     {
-      System.out.println("Reading from standard input...");
-      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");
+      System.out.println("Lendo a entrada padrão");
+      System.out.print("class Classe {\n\tint numero = 6; \n}\n");
       try
       {
-        switch (langJavaSh.one_line())
+        switch (langJavaSh.ClassStruct())
         {
           case 0 : 
           System.out.println("OK.");
           break;
           case 1 : 
-          System.out.println("Goodbye.");
+          System.out.println("Sem Classe, porem ta ok");
           break;
           default : 
           break;
@@ -109,6 +109,7 @@ TOKEN :
   | < Float >
   | < String >
   | < Bool > >
+| < Class: "class" >
 | < Constructor : "constructor(" ") {" "}" >
 | < IdentVar : [ "a"-"z" ] (< CHAR >)* >
 | < IdentClass : [ "A"-"Z" ] (< CHAR >)* >
@@ -203,10 +204,10 @@ void LogicalSta() :
 void initVar() :
 {}
 {
-	  < Int > < IdentVar > ";"  code() < IdentVar > "=" MathSta() ";"
-	  < Bool > < IdentVar > ";" code() < IdentVar > "=" LogicalSta() ";"
-	  < Int > < IdentVar > "=" MathSta() ";"
-| 	< Bool > < IdentVar > "=" LogicalSta() ";"
+	  < Int > < IdentVar > ";"  code() < IdentVar > "=" MathSta() ";"|
+	  < Bool > < IdentVar > ";" code() < IdentVar > "=" LogicalSta() ";"|
+	  < Int > < IdentVar > "=" MathSta() ";"|
+ 	< Bool > < IdentVar > "=" LogicalSta() ";"
 }
 
 void IfExpression() :
@@ -241,6 +242,11 @@ void WhileExpretion(): { } {
 	" }"
 }
 
+int ClassStruct(): { } {
+	< Class ><IdentClass >"{"code()"}" { return 0; }|
+	code() { return 1;}
+}
+
 void code() :
 {}
 {
@@ -249,5 +255,5 @@ void code() :
   		| IfExpression()
 		| ForExpression()
 		| WhileExpretion() 
-	  )*
+	  )*< EOF >
 }

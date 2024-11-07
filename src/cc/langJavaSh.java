@@ -8,20 +8,11 @@ public class langJavaSh implements langJavaShConstants {
     while (true)
     {
       System.out.println("Lendo a entrada padr\u00e3o");
-      System.out.print("class Classe {\n\tint numero = 6; \n}\n");
+      //      System.out.print("class Classe {\n\tint numero = 6; \n}\n");
       try
       {
-        switch (langJavaSh.ClassStruct())
-        {
-          case 0 :
-          System.out.println("OK.");
-          break;
-          case 1 :
-          System.out.println("Sem Classe, porem ta ok");
-          break;
-          default :
-          break;
-        }
+        langJavaSh.ClassStruct();
+        System.out.println("Compilado com sucesso");
       }
       catch (Exception e)
       {
@@ -42,21 +33,14 @@ public class langJavaSh implements langJavaShConstants {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case MINUS:
     case CONSTANT:
-    case 42:{
+    case 36:{
       sum();
-      jj_consume_token(41);
 {if ("" != null) return 0;}
-      break;
-      }
-    case 41:{
-      jj_consume_token(41);
-{if ("" != null) return 1;}
       break;
       }
     default:
       jj_la1[0] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+{if ("" != null) return 1;}
     }
     throw new Error("Missing return statement in function");
 }
@@ -133,7 +117,7 @@ public class langJavaSh implements langJavaShConstants {
       break;
       }
     case CONSTANT:
-    case 42:{
+    case 36:{
       element();
       break;
       }
@@ -150,10 +134,10 @@ public class langJavaSh implements langJavaShConstants {
       jj_consume_token(CONSTANT);
       break;
       }
-    case 42:{
-      jj_consume_token(42);
+    case 36:{
+      jj_consume_token(36);
       sum();
-      jj_consume_token(43);
+      jj_consume_token(37);
       break;
       }
     default:
@@ -165,8 +149,8 @@ public class langJavaSh implements langJavaShConstants {
 
   static final public void MathSta() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case IdentVar:{
-      jj_consume_token(IdentVar);
+    case Ident:{
+      jj_consume_token(Ident);
       break;
       }
     case CONSTANT:{
@@ -178,26 +162,22 @@ public class langJavaSh implements langJavaShConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-    label_3:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case MATH:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[8] = jj_gen;
-        break label_3;
-      }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case MATH:{
       jj_consume_token(MATH);
       MathSta();
+      break;
+      }
+    default:
+      jj_la1[8] = jj_gen;
+      ;
     }
 }
 
   static final public void LogicalSta() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case CONSTANT:
-    case IdentVar:{
+    case Ident:{
       MathSta();
       jj_consume_token(LogicalMathOperator);
       MathSta();
@@ -209,8 +189,8 @@ public class langJavaSh implements langJavaShConstants {
         jj_consume_token(LOGICALCONSTANT);
         break;
         }
-      case IdentVar:{
-        jj_consume_token(IdentVar);
+      case Ident:{
+        jj_consume_token(Ident);
         break;
         }
       default:
@@ -218,19 +198,15 @@ public class langJavaSh implements langJavaShConstants {
         jj_consume_token(-1);
         throw new ParseException();
       }
-      label_4:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case LogicalDigital:{
-          ;
-          break;
-          }
-        default:
-          jj_la1[10] = jj_gen;
-          break label_4;
-        }
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case LogicalDigital:{
         jj_consume_token(LogicalDigital);
         LogicalSta();
+        break;
+        }
+      default:
+        jj_la1[10] = jj_gen;
+        ;
       }
       break;
       }
@@ -241,42 +217,17 @@ public class langJavaSh implements langJavaShConstants {
     }
 }
 
-  static final public void initVar() throws ParseException {
+  static final public void atributeVar() throws ParseException {
+    jj_consume_token(Ident);
+    jj_consume_token(Atribute);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case Int:{
-      jj_consume_token(Int);
-      jj_consume_token(IdentVar);
-      jj_consume_token(41);
-      code();
-      jj_consume_token(IdentVar);
-      jj_consume_token(Atribute);
+    case CONSTANT:
+    case Ident:{
       MathSta();
-      jj_consume_token(41);
       break;
       }
-    case Bool:{
-      jj_consume_token(Bool);
-      jj_consume_token(IdentVar);
-      jj_consume_token(41);
-      code();
-      jj_consume_token(IdentVar);
-      jj_consume_token(Atribute);
+    case LOGICALCONSTANT:{
       LogicalSta();
-      jj_consume_token(41);
-      break;
-      }{
-      jj_consume_token(Int);
-      jj_consume_token(IdentVar);
-      jj_consume_token(Atribute);
-      MathSta();
-      jj_consume_token(41);
-      break;
-      }{
-      jj_consume_token(Bool);
-      jj_consume_token(IdentVar);
-      jj_consume_token(Atribute);
-      LogicalSta();
-      jj_consume_token(41);
       break;
       }
     default:
@@ -286,32 +237,190 @@ public class langJavaSh implements langJavaShConstants {
     }
 }
 
-  static final public void IfExpression() throws ParseException {
-    jj_consume_token(If);
-    jj_consume_token(42);
-    LogicalSta();
-    jj_consume_token(43);
-    jj_consume_token(44);
-    code();
-    jj_consume_token(45);
+  static final public void initVar() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case Else:{
-      jj_consume_token(Else);
-      jj_consume_token(46);
-      code();
-      jj_consume_token(45);
+    case Int:{
+      jj_consume_token(Int);
+      jj_consume_token(Ident);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Atribute:{
+        jj_consume_token(Atribute);
+        MathSta();
+        break;
+        }
+      default:
+        jj_la1[13] = jj_gen;
+        ;
+      }
+      break;
+      }
+    case Bool:{
+      jj_consume_token(Bool);
+      jj_consume_token(Ident);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Atribute:{
+        jj_consume_token(Atribute);
+        LogicalSta();
+        break;
+        }
+      default:
+        jj_la1[14] = jj_gen;
+        ;
+      }
+      break;
+      }
+    case String:{
+      jj_consume_token(String);
+      jj_consume_token(Ident);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Atribute:{
+        jj_consume_token(Atribute);
+        jj_consume_token(38);
+        label_3:
+        while (true) {
+          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+          case CHAR:{
+            ;
+            break;
+            }
+          default:
+            jj_la1[15] = jj_gen;
+            break label_3;
+          }
+          jj_consume_token(CHAR);
+        }
+        jj_consume_token(38);
+        break;
+        }
+      default:
+        jj_la1[16] = jj_gen;
+        ;
+      }
       break;
       }
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[17] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+}
+
+  static final public void Method() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case AccessMod:{
+      jj_consume_token(AccessMod);
+      break;
+      }
+    default:
+      jj_la1[18] = jj_gen;
+      ;
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Int:{
+      jj_consume_token(Int);
+      break;
+      }
+    case Float:{
+      jj_consume_token(Float);
+      break;
+      }
+    case String:{
+      jj_consume_token(String);
+      break;
+      }
+    case Bool:{
+      jj_consume_token(Bool);
+      break;
+      }
+    default:
+      jj_la1[19] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(Ident);
+    jj_consume_token(36);
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Int:
+      case Float:
+      case String:
+      case Bool:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[20] = jj_gen;
+        break label_4;
+      }
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Int:{
+        jj_consume_token(Int);
+        break;
+        }
+      case Float:{
+        jj_consume_token(Float);
+        break;
+        }
+      case String:{
+        jj_consume_token(String);
+        break;
+        }
+      case Bool:{
+        jj_consume_token(Bool);
+        break;
+        }
+      default:
+        jj_la1[21] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      jj_consume_token(Ident);
+      label_5:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case 39:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[22] = jj_gen;
+          break label_5;
+        }
+        jj_consume_token(39);
+      }
+    }
+    jj_consume_token(40);
+    code();
+    jj_consume_token(41);
+}
+
+  static final public void IfExpression() throws ParseException {
+    jj_consume_token(If);
+    jj_consume_token(36);
+    LogicalSta();
+    jj_consume_token(37);
+    jj_consume_token(42);
+    stra();
+    jj_consume_token(41);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Else:{
+      jj_consume_token(Else);
+      jj_consume_token(42);
+      stra();
+      jj_consume_token(41);
+      break;
+      }
+    default:
+      jj_la1[23] = jj_gen;
       ;
     }
 }
 
   static final public void IncrementalExpression() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case IdentVar:{
-      jj_consume_token(IdentVar);
+    case Ident:{
+      jj_consume_token(Ident);
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case DECREMENT:{
         jj_consume_token(DECREMENT);
@@ -322,7 +431,7 @@ public class langJavaSh implements langJavaShConstants {
         break;
         }
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -340,15 +449,15 @@ public class langJavaSh implements langJavaShConstants {
         break;
         }
       default:
-        jj_la1[15] = jj_gen;
+        jj_la1[25] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      jj_consume_token(IdentVar);
+      jj_consume_token(Ident);
       break;
       }
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[26] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -356,125 +465,299 @@ public class langJavaSh implements langJavaShConstants {
 
   static final public void ForExpression() throws ParseException {
     jj_consume_token(For);
-    jj_consume_token(42);
+    jj_consume_token(36);
+    initVar();
+    jj_consume_token(43);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case Int:
-    case Bool:{
-      initVar();
+    case Ident:{
+      jj_consume_token(Ident);
+      jj_consume_token(LogicalMathOperator);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Ident:{
+        jj_consume_token(Ident);
+        break;
+        }
+      case CONSTANT:{
+        jj_consume_token(CONSTANT);
+        break;
+        }
+      default:
+        jj_la1[27] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       break;
       }
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[28] = jj_gen;
       ;
     }
-    jj_consume_token(41);
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case CONSTANT:
-    case LOGICALCONSTANT:
-    case IdentVar:{
-      LogicalSta();
-      break;
-      }
-    default:
-      jj_la1[18] = jj_gen;
-      ;
-    }
-    jj_consume_token(41);
+    jj_consume_token(43);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INCREMENT:
     case DECREMENT:
-    case IdentVar:{
+    case Ident:{
       IncrementalExpression();
       break;
       }
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[29] = jj_gen;
       ;
     }
-    jj_consume_token(47);
-    code();
-    jj_consume_token(48);
+    jj_consume_token(37);
+    jj_consume_token(42);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case INCREMENT:
+    case DECREMENT:
+    case While:
+    case If:
+    case For:
+    case Int:
+    case String:
+    case Bool:
+    case Ident:{
+      stra();
+      break;
+      }
+    default:
+      jj_la1[30] = jj_gen;
+      ;
+    }
+    jj_consume_token(41);
 }
 
   static final public void WhileExpretion() throws ParseException {
     jj_consume_token(While);
-    jj_consume_token(42);
+    jj_consume_token(36);
     LogicalSta();
-    jj_consume_token(49);
-    code();
-    jj_consume_token(48);
-}
-
-  static final public int ClassStruct() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case Class:{
-      jj_consume_token(Class);
-      jj_consume_token(IdentClass);
-      jj_consume_token(44);
-      code();
-      jj_consume_token(45);
-{if ("" != null) return 0;}
+    case 40:{
+      jj_consume_token(40);
       break;
       }
-    case 0:
-    case Int:
-    case Bool:
-    case While:
-    case If:
-    case For:{
-      code();
-{if ("" != null) return 1;}
+    case 37:{
+      jj_consume_token(37);
+      jj_consume_token(42);
       break;
       }
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[31] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-    throw new Error("Missing return statement in function");
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case INCREMENT:
+    case DECREMENT:
+    case While:
+    case If:
+    case For:
+    case Int:
+    case String:
+    case Bool:
+    case Ident:{
+      stra();
+      break;
+      }
+    default:
+      jj_la1[32] = jj_gen;
+      ;
+    }
+    jj_consume_token(41);
 }
 
-  static final public void code() throws ParseException {
-    label_5:
+  static final public void prop() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case AccessMod:{
+      jj_consume_token(AccessMod);
+      break;
+      }
+    default:
+      jj_la1[33] = jj_gen;
+      ;
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Int:{
+      jj_consume_token(Int);
+      break;
+      }
+    case Float:{
+      jj_consume_token(Float);
+      break;
+      }
+    case String:{
+      jj_consume_token(String);
+      break;
+      }
+    case Bool:{
+      jj_consume_token(Bool);
+      break;
+      }
+    default:
+      jj_la1[34] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(Ident);
+}
+
+  static final public void ClassStruct() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case AccessMod:{
+      jj_consume_token(AccessMod);
+      break;
+      }
+    default:
+      jj_la1[35] = jj_gen;
+      ;
+    }
+    jj_consume_token(Class);
+    jj_consume_token(Ident);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Extends:{
+      jj_consume_token(Extends);
+      jj_consume_token(Ident);
+      break;
+      }
+    default:
+      jj_la1[36] = jj_gen;
+      ;
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Implements:{
+      jj_consume_token(Implements);
+      jj_consume_token(Ident);
+      label_6:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case 44:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[37] = jj_gen;
+          break label_6;
+        }
+        jj_consume_token(44);
+        jj_consume_token(Ident);
+      }
+      break;
+      }
+    default:
+      jj_la1[38] = jj_gen;
+      ;
+    }
+    jj_consume_token(42);
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case AccessMod:
       case Int:
-      case Bool:
-      case While:
-      case If:
-      case For:{
+      case Float:
+      case String:
+      case Bool:{
         ;
         break;
         }
       default:
-        jj_la1[21] = jj_gen;
-        break label_5;
+        jj_la1[39] = jj_gen;
+        break label_7;
       }
+      Method();
+    }
+    jj_consume_token(41);
+}
+
+  static final public void stra() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case INCREMENT:
+    case DECREMENT:
+    case Int:
+    case String:
+    case Bool:
+    case Ident:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Ident:{
+        atributeVar();
+        break;
+        }
       case Int:
+      case String:
       case Bool:{
         initVar();
         break;
         }
-      case If:{
-        IfExpression();
-        break;
-        }
-      case For:{
-        ForExpression();
-        break;
-        }
-      case While:{
-        WhileExpretion();
+      case INCREMENT:
+      case DECREMENT:{
+        IncrementalExpression();
         break;
         }
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[40] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
+      jj_consume_token(43);
+      break;
+      }
+    case If:{
+      IfExpression();
+      break;
+      }
+    case For:{
+      ForExpression();
+      break;
+      }
+    case While:{
+      WhileExpretion();
+      break;
+      }
+    default:
+      jj_la1[41] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
-    jj_consume_token(0);
+}
+
+  static final public void code() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case Return:{
+      jj_consume_token(Return);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case Ident:{
+        jj_consume_token(Ident);
+        break;
+        }
+      default:
+        jj_la1[42] = jj_gen;
+        ;
+      }
+      jj_consume_token(43);
+      break;
+      }
+    default:
+      jj_la1[44] = jj_gen;
+      label_8:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case INCREMENT:
+        case DECREMENT:
+        case While:
+        case If:
+        case For:
+        case Int:
+        case String:
+        case Bool:
+        case Ident:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[43] = jj_gen;
+          break label_8;
+        }
+        stra();
+      }
+    }
 }
 
   static private boolean jj_initialized_once = false;
@@ -487,7 +770,7 @@ public class langJavaSh implements langJavaShConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[23];
+  static final private int[] jj_la1 = new int[45];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -495,10 +778,10 @@ public class langJavaSh implements langJavaShConstants {
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x800100,0x120,0x120,0x600,0x600,0x800100,0x800000,0x800000,0x800,0x1000000,0x4000,0x1800000,0x48000000,0x0,0xc0,0xc0,0xc0,0x48000000,0x1800000,0xc0,0x48000001,0x48000000,0x48000000,};
+	   jj_la1_0 = new int[] {0x20100,0x120,0x120,0x600,0x600,0x20100,0x20000,0x20000,0x800,0x40000,0x1000,0x60000,0x60000,0x10000,0x10000,0x0,0x10000,0xa0000000,0x100000,0xe0000000,0xe0000000,0xe0000000,0x0,0x4000000,0xc0,0xc0,0xc0,0x20000,0x0,0xc0,0xab0000c0,0x0,0xab0000c0,0x100000,0xe0000000,0x100000,0x200000,0x0,0x400000,0xe0100000,0xa00000c0,0xab0000c0,0x0,0xab0000c0,0x800000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x600,0x0,0x0,0x0,0x0,0x400,0x400,0x4,0x0,0x4,0x0,0x4,0x0,0x40,0x0,0x0,0x4,0x0,0x4,0x4,0xb1,0xb0,0xb0,};
+	   jj_la1_1 = new int[] {0x10,0x0,0x0,0x0,0x0,0x10,0x10,0x4,0x0,0x4,0x0,0x4,0x4,0x0,0x0,0x8,0x0,0x1,0x0,0x1,0x1,0x1,0x80,0x0,0x0,0x0,0x4,0x4,0x4,0x4,0x5,0x120,0x5,0x0,0x1,0x0,0x0,0x1000,0x0,0x1,0x5,0x5,0x4,0x5,0x0,};
 	}
 
   /** Constructor with InputStream. */
@@ -519,7 +802,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 45; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -533,7 +816,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 45; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -550,7 +833,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 45; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -568,7 +851,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 45; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -584,7 +867,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 45; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -593,7 +876,7 @@ public class langJavaSh implements langJavaShConstants {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 45; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -644,12 +927,12 @@ public class langJavaSh implements langJavaShConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[50];
+	 boolean[] la1tokens = new boolean[45];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 23; i++) {
+	 for (int i = 0; i < 45; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -661,7 +944,7 @@ public class langJavaSh implements langJavaShConstants {
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 50; i++) {
+	 for (int i = 0; i < 45; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;

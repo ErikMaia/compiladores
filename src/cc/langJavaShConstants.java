@@ -25,63 +25,53 @@ public interface langJavaShConstants {
   /** RegularExpression Id. */
   int MATH = 11;
   /** RegularExpression Id. */
-  int And = 12;
+  int LogicalDigital = 12;
   /** RegularExpression Id. */
-  int Or = 13;
+  int And = 13;
   /** RegularExpression Id. */
-  int LogicalDigital = 14;
+  int Or = 14;
   /** RegularExpression Id. */
-  int Equal = 15;
+  int LogicalMathOperator = 15;
   /** RegularExpression Id. */
-  int Diferent = 16;
+  int Atribute = 16;
   /** RegularExpression Id. */
-  int Atribute = 17;
+  int CONSTANT = 17;
   /** RegularExpression Id. */
-  int Above = 18;
+  int LOGICALCONSTANT = 18;
   /** RegularExpression Id. */
-  int AboveEqual = 19;
+  int DIGIT = 19;
   /** RegularExpression Id. */
-  int Lower = 20;
+  int AccessMod = 20;
   /** RegularExpression Id. */
-  int LowerEqual = 21;
+  int Extends = 21;
   /** RegularExpression Id. */
-  int LogicalMathOperator = 22;
+  int Implements = 22;
   /** RegularExpression Id. */
-  int CONSTANT = 23;
+  int Return = 23;
   /** RegularExpression Id. */
-  int LOGICALCONSTANT = 24;
+  int While = 24;
   /** RegularExpression Id. */
-  int DIGIT = 25;
+  int If = 25;
   /** RegularExpression Id. */
-  int CHAR = 26;
+  int Else = 26;
   /** RegularExpression Id. */
-  int Int = 27;
+  int For = 27;
   /** RegularExpression Id. */
-  int Float = 28;
+  int Do = 28;
   /** RegularExpression Id. */
-  int String = 29;
+  int Int = 29;
   /** RegularExpression Id. */
-  int Bool = 30;
+  int Float = 30;
   /** RegularExpression Id. */
-  int Type = 31;
+  int String = 31;
   /** RegularExpression Id. */
-  int Class = 32;
+  int Bool = 32;
   /** RegularExpression Id. */
-  int Constructor = 33;
+  int Class = 33;
   /** RegularExpression Id. */
-  int IdentVar = 34;
+  int Ident = 34;
   /** RegularExpression Id. */
-  int IdentClass = 35;
-  /** RegularExpression Id. */
-  int While = 36;
-  /** RegularExpression Id. */
-  int If = 37;
-  /** RegularExpression Id. */
-  int Else = 38;
-  /** RegularExpression Id. */
-  int For = 39;
-  /** RegularExpression Id. */
-  int Do = 40;
+  int CHAR = 35;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -100,44 +90,39 @@ public interface langJavaShConstants {
     "\"*\"",
     "\"/\"",
     "<MATH>",
-    "\"&&\"",
-    "\"||\"",
     "<LogicalDigital>",
-    "\"==\"",
-    "\"!=\"",
-    "\"=\"",
-    "\">\"",
-    "\">=\"",
-    "\"<\"",
-    "\"<=\"",
+    "<And>",
+    "<Or>",
     "<LogicalMathOperator>",
+    "\"=\"",
     "<CONSTANT>",
     "<LOGICALCONSTANT>",
     "<DIGIT>",
-    "<CHAR>",
-    "\"int\"",
-    "\"float\"",
-    "\"string\"",
-    "\"bool\"",
-    "<Type>",
-    "\"class\"",
-    "<Constructor>",
-    "<IdentVar>",
-    "<IdentClass>",
+    "<AccessMod>",
+    "\"extends\"",
+    "\"implements\"",
+    "\"return\"",
     "\"while\"",
     "\"if\"",
     "\"else\"",
     "\"for\"",
     "\"do\"",
-    "\";\"",
+    "\"int\"",
+    "\"float\"",
+    "\"string\"",
+    "\"bool\"",
+    "\"class\"",
+    "<Ident>",
+    "<CHAR>",
     "\"(\"",
     "\")\"",
-    "\"{\"",
-    "\"}\"",
-    "\" { \"",
+    "\"\\\"\"",
+    "\"[]\"",
     "\"){\"",
-    "\" }\"",
-    "\") { \"",
+    "\"}\"",
+    "\"{\"",
+    "\";\"",
+    "\",\"",
   };
 
 }

@@ -15,21 +15,12 @@ public class langJavaSh
     langJavaSh parser = new langJavaSh(System.in);
     while (true)
     {
-      System.out.println("Lendo a entrada padrão");
-      System.out.print("class Classe {\n\tint numero = 6; \n}\n");
+      System.out.println("Lendo a entrada padr\u00e3o");
+      //      System.out.print("class Classe {\n\tint numero = 6; \n}\n");
       try
       {
-        switch (langJavaSh.ClassStruct())
-        {
-          case 0 : 
-          System.out.println("OK.");
-          break;
-          case 1 : 
-          System.out.println("Sem Classe, porem ta ok");
-          break;
-          default : 
-          break;
-        }
+        langJavaSh.ClassStruct();
+        System.out.println("Compilado com sucesso");
       }
       catch (Exception e)
       {
@@ -60,8 +51,8 @@ SKIP :
 TOKEN : /* OPERATORS */
 {
   < PLUS : "+" >
-| < INCREMENT: "++" >
-| < DECREMENT: "--" >
+| < INCREMENT : "++" >
+| < DECREMENT : "--" >
 | < MINUS : "-" >
 | < MULTIPLY : "*" >
 | < DIVIDE : "/" >
@@ -72,24 +63,23 @@ TOKEN : /* OPERATORS */
     | < MULTIPLY >
     | < DIVIDE >
     ) >
-| < And : "&&" >
-| < Or : "||" >
 | < LogicalDigital :
     < And >
   | < Or > >
-| < Equal : "==" >
-| < Diferent : "!=" >
-| < Atribute : "=" >
-| < Above : ">" >
-| < AboveEqual : ">=" >
-| < Lower : "<" >
-| < LowerEqual : "<=" >
+| < And :
+    "&&"
+  | "and" >
+| < Or :
+    "||"
+  | "or" >
 | < LogicalMathOperator :
-    < Equal >
-  | < Above >
-  | < AboveEqual >
-  | < Lower >
-  | < LowerEqual > >
+    "=="
+  | ">"
+  | ">="
+  | "<"
+  | "<="
+  | "!=" >
+| < Atribute : "=" >
 }
 
 TOKEN :
@@ -99,40 +89,48 @@ TOKEN :
     "true"
   | "false" >
 | < DIGIT : [ "0"-"9" ] >
-| < CHAR : ([ "a"-"z" ] [ "A"-"Z" ])+ >
-| < Int : "int" >
-| < Float : "float" >
-| < String : "string" >
-| < Bool : "bool" >
-| < Type :
-    < Int >
-  | < Float >
-  | < String >
-  | < Bool > >
-| < Class: "class" >
-| < Constructor : "constructor(" ") {" "}" >
-| < IdentVar : [ "a"-"z" ] (< CHAR >)* >
-| < IdentClass : [ "A"-"Z" ] (< CHAR >)* >
+| < AccessMod :
+    "public"
+  | "private"
+  | "protected" >
+| < Extends : "extends" >
+| < Implements : "implements" >
+| < Return : "return" >
 }
 
 // Palavras reservadas
 TOKEN :
 {
 	  < While : "while" >
-| 	  < If : "if" >
-| 	  < Else : "else" >
-| 	  < For : "for" >
-| 	  < Do : "do" >
+| 	< If : "if" >
+| 	< Else : "else" >
+| 	< For : "for" >
+| 	< Do : "do" >
+| < Int : "int" >
+| < Float : "float" >
+| < String : "string" >
+| < Bool : "bool" >
+| < Class : "class" >
+}
+
+TOKEN :
+{
+  < Ident : (< CHAR >)+ >
+| < CHAR :
+    (
+      [ "a"-"z" ]
+    | [ "A"-"Z" ]
+    ) >
 }
 
 int one_line() :
 {}
 {
-  sum() ";"
+  sum()
   {
     return 0;
   }
-| ";"
+|
   {
     return 1;
   }
@@ -181,79 +179,164 @@ void element() :
 void MathSta() :
 {}
 {
-	  (
-	    < IdentVar >
+  (
+    < Ident >
   | < CONSTANT >
-	  )
-	  (< MATH > MathSta())*
-	}
+  )
+  (
+    < MATH > MathSta()
+  )?
+}
 
 void LogicalSta() :
 {}
 {
-	  MathSta()
-	  < LogicalMathOperator > 
-	  MathSta()
-|(
-	    < LOGICALCONSTANT >
-  | < IdentVar >
-	  )
-	  (< LogicalDigital >(LogicalSta()))*
-	}
+	  (
+	    MathSta() < LogicalMathOperator > MathSta()
+  )
+	|
+  (
+    < LOGICALCONSTANT >
+  | < Ident >
+  )
+	  (
+    < LogicalDigital > LogicalSta()
+  )?
+}
+
+void atributeVar(): { } {
+	< Ident > "=" (MathSta() |LogicalSta() )
+
+}
 
 void initVar() :
 {}
 {
-	  < Int > < IdentVar > ";"  code() < IdentVar > "=" MathSta() ";"|
-	  < Bool > < IdentVar > ";" code() < IdentVar > "=" LogicalSta() ";"|
-	  < Int > < IdentVar > "=" MathSta() ";"|
- 	< Bool > < IdentVar > "=" LogicalSta() ";"
+	  < Int > < Ident >
+  (
+    "=" MathSta()
+  )?
+| 	< Bool > < Ident >
+  (
+    "=" LogicalSta()
+  )?
+| 	< String > < Ident >
+  (
+    "=" "\"" (< CHAR >)* "\""
+  )?
+}
+
+void Method() :
+{}
+{
+	  (< AccessMod >)?
+  (
+    < Int >
+  | < Float >
+  | < String >
+  | < Bool >
+  )
+  < Ident > "("
+  (
+    (
+      < Int >
+    | < Float >
+    | < String >
+    | < Bool >
+    )
+    < Ident > ("[]")*
+  )*
+  "){" code() "}"
 }
 
 void IfExpression() :
 {}
 {
-	  < If > "(" LogicalSta() ")" "{" 
-		  code() 
+	  < If > "(" LogicalSta()")" "{"
+		  stra() 
 	  "}"
   (
-    < Else > " { " 
-		    code() 
+    < Else > "{" 
+		    stra() 
 	    "}"
   )?
 }
 
-void IncrementalExpression(): { } {
-	< IdentVar > (< DECREMENT > |< INCREMENT > )|
-	(< DECREMENT > |< INCREMENT > )< IdentVar >
+void IncrementalExpression() :
+{}
+{
+	  < Ident >
+  (
+    < DECREMENT >
+  | < INCREMENT >
+  )
+|
+	  (
+    < DECREMENT >
+  | < INCREMENT >
+  )
+  < Ident >
 }
 
 void ForExpression() :
 {}
 {
-	  < For > "(" (initVar())? ";"(LogicalSta())?";"(IncrementalExpression())?"){"
-		code()
-	  " }"
+	  < For > "("initVar()";"(< Ident > <LogicalMathOperator > (< Ident > | < CONSTANT > ))?";"(IncrementalExpression())?")""{" 
+		  (stra())?
+	  "}"
 }
 
-void WhileExpretion(): { } {
-	< While > "("LogicalSta()") { "
-		code()
-	" }"
+void WhileExpretion() :
+{}
+{
+	  < While > "(" LogicalSta()
+  (
+    "){"
+  | ")" "{"
+  )
+		  (stra())? 
+	  "}"
 }
 
-int ClassStruct(): { } {
-	< Class ><IdentClass >"{"code()"}" { return 0; }|
-	code() { return 1;}
+void prop() :
+{}
+{
+	  (< AccessMod >)?
+  (
+    < Int >
+  | < Float >
+  | < String >
+  | < Bool >
+  )
+  < Ident >
+}
+
+void ClassStruct() :
+{}
+{
+  (< AccessMod >)? < Class > < Ident > (< Extends > < Ident >)?
+  (
+    < Implements > < Ident > ("," < Ident >)*
+  )?
+  "{"
+  (
+    Method()
+  )*
+  "}"
+}
+
+void stra() :
+{}
+{
+    (atributeVar() |initVar()| IncrementalExpression()) ";"
+  	| IfExpression()
+	| ForExpression()
+    | WhileExpretion()
 }
 
 void code() :
 {}
 {
-	  (
-	    initVar()
-  		| IfExpression()
-		| ForExpression()
-		| WhileExpretion() 
-	  )*< EOF >
+  	(< Return > (< Ident >)? ";")
+	|(stra())*
 }

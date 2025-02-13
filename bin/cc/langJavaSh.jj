@@ -1,267 +1,267 @@
 /**
- * Versão transformada da gramática para LL(1)
+ * Versão transformada da gramática para LL(1) sem ambiguidade e com
+ * expressão unificada para operações aritméticas.
  */
-options
-{
-  static = true;
+options {
+    static = true;
 }
 
 PARSER_BEGIN(langJavaSh)
 package cc;
 public class langJavaSh {
-  public static void main(String args[]) throws ParseException, FileNotFoundException {
-    if (args.length == 0) {
-        System.out.println("Uso: java langJavaSh <arquivo>");
-        System.exit(1);
-    }
-
-    // Abre o arquivo de entrada
-    java.io.FileInputStream fileInputStream = new java.io.FileInputStream(args[0]);
-    langJavaSh parser = new langJavaSh(fileInputStream);
-
-    while (true) {
-        System.out.println("Lendo o arquivo de entrada");
-        try {
-            parser.ClassStruct(); // Analisa a estrutura da classe
-            System.out.println("Compilado com sucesso");
-        } catch (Exception e) {
-            System.out.println("NOK.");
-            System.out.println(e.getMessage());
-            parser.ReInit(fileInputStream); // Reinicializa o parser com o arquivo
-        } catch (Error e) {
-            System.out.println("Oops.");
-            System.out.println(e.getMessage());
-            break;
+    public static void main(String args[]) throws ParseException, Exception {
+        if (args.length == 0) {
+            System.out.println("Uso: java langJavaSh <arquivo>");
+            System.exit(1);
+        }
+        java.io.FileInputStream fileInputStream = new java.io.FileInputStream(args[0]);
+        langJavaSh parser = new langJavaSh(fileInputStream);
+        while (fileInputStream.available() > 0) {
+            System.out.println("Lendo o arquivo de entrada");
+            try {
+                parser.ClassStruct();
+                System.out.println("Compilado com sucesso");
+                break;
+            } catch (ParseException e) {
+                System.out.println("NOK.");
+                System.out.println(e.getMessage());
+                parser.ReInit(fileInputStream);
+            } catch (Error e) {
+                System.out.println("Oops.");
+                System.out.println(e.getMessage());
+                break;
+            }
         }
     }
 }
-}
 PARSER_END(langJavaSh)
 
-SKIP :
-{
-  " " | "\r" | "\t" | "\n"
+SKIP : { " " | "\r" | "\t" | "\n" }
+
+TOKEN : {
+    < PLUS : "+" >
+|   < INCREMENT : "++" >
+|   < DECREMENT : "--" >
+|   < MINUS : "-" >
+|   < MULTIPLY : "*" >
+|   < DIVIDE : "/" >
+|   < MATH : ( <PLUS> | <MINUS> | <MULTIPLY> | <DIVIDE> ) >
+|   < LogicalDigital : ( <And> | <Or> ) >
+|   < And : "&&" | "and" >
+|   < Or : "||" | "or" >
+|   < LogicalMathOperator : "==" | ">" | ">=" | "<" | "<=" | "!=" >
+|   < Atribute : "=" >
 }
 
 TOKEN : {
-  < PLUS : "+" >
-| < INCREMENT : "++" >
-| < DECREMENT : "--" >
-| < MINUS : "-" >
-| < MULTIPLY : "*" >
-| < DIVIDE : "/" >
-| < MATH : ( <PLUS> | <MINUS> | <MULTIPLY> | <DIVIDE> ) >
-| < LogicalDigital : ( <And> | <Or> ) >
-| < And : "&&" | "and" >
-| < Or : "||" | "or" >
-| < LogicalMathOperator : "==" | ">" | ">=" | "<" | "<=" | "!=" >
-| < Atribute : "=" >
+    < CONSTANT : ( <DIGIT> )+ >
+|   < LOGICALCONSTANT : "true" | "false" >
+|   < DIGIT : ["0"-"9"] >
+|   < AccessMod : "public" | "private" | "protected" >
+|   < Extends : "extends" >
+|   < Implements : "implements" >
+|   < Return : "return" >
 }
 
 TOKEN : {
-  < CONSTANT : ( <DIGIT> )+ >
-| < LOGICALCONSTANT : "true" | "false" >
-| < DIGIT : ["0"-"9"] >
-| < AccessMod : "public" | "private" | "protected" >
-| < Extends : "extends" >
-| < Implements : "implements" >
-| < Return : "return" >
+    < While : "while" >
+|   < If : "if" >
+|   < Else : "else" >
+|   < For : "for" >
+|   < Do : "do" >
+|   < Int : "int" >
+|   < Float : "float" >
+|   < String : "string" >
+|   < Bool : "bool" >
+|   < Class : "class" >
 }
 
 TOKEN : {
-      < While : "while" >
-|     < If : "if" >
-|     < Else : "else" >
-|     < For : "for" >
-|     < Do : "do" >
-|     < Int : "int" >
-|     < Float : "float" >
-|     < String : "string" >
-|     < Bool : "bool" >
-|     < Class : "class" >
+    < Ident : ( <CHAR> )+ >
+|   < CHAR : ["a"-"z", "A"-"Z"] >
 }
 
+/* Token para literal de string */
 TOKEN : {
-  < Ident : ( <CHAR> )+ >
-| < CHAR : ["a"-"z", "A"-"Z"] >
+    < StringLiteralToken : "\"" (~["\"", "\n", "\r"])* "\"" >
 }
 
-/* Produções da gramática */
-
-/* Expressões aritméticas */
-void sum() :
-{ }
+//
+// Expressões aritméticas e lógicas unificadas
+//
+void sum() : {} 
 {
     term() ( ( <PLUS> | <MINUS> ) term() )*
 }
 
-void term() :
-{ }
+void term() : {} 
 {
     unary() ( ( <MULTIPLY> | <DIVIDE> ) unary() )*
 }
 
-void unary() :
-{ }
+void unary() : {} 
 {
-    <MINUS> element()
-  | element()
+    // Permite operador unário '+' ou '-' antes do operando
+    ( <PLUS> | <MINUS> )? element()
 }
 
-void element() :
-{ }
+void element() : {} 
 {
     <CONSTANT>
-  | "(" sum() ")"
+|   <Ident>
+|   "(" sum() ")"
 }
 
-void MathSta() :
-{ }
-{
-    ( <Ident> | <CONSTANT> ) ( <MATH> MathSta() )?
-}
-
-/* --- Transformação das expressões lógicas --- */
-void LogicalSta() :
-{ }
+void LogicalSta() : {} 
 {
     BooleanExp()
 }
 
-void BooleanExp() :
-{ }
+void BooleanExp() : {} 
 {
     BooleanPrimary() BooleanExpTail()
 }
 
-void BooleanExpTail() :
-{ }
+void BooleanExpTail() : {} 
 {
     ( <LogicalDigital> BooleanExp() )?
 }
 
-void BooleanPrimary() :
-{ }
+void BooleanPrimary() : {} 
 {
     <LOGICALCONSTANT>
-  | <CONSTANT> ( <MATH> MathSta() )?
-  | <Ident> ( <LogicalMathOperator> MathSta() )?
+|   <CONSTANT> ( <MATH> sum() )?
+|   <Ident> ( <LogicalMathOperator> sum() )?
 }
 
-/* --- Transformação de atribuição e incremento --- */
-void VarAssignOrInc() :
-{ }
+//
+// Atribuição e expressões incrementais
+//
+void VarAssignOrInc() : {} 
 {
     <Ident> VarAssignOrIncTail()
 }
 
-void VarAssignOrIncTail() :
-{ }
+void VarAssignOrIncTail() : {} 
 {
-    LOOKAHEAD(1) // Verifica o próximo token
-    "=" ( MathSta() | LogicalSta() )
-  | ( <DECREMENT> | <INCREMENT> )
+    LOOKAHEAD(1)
+    "=" ( sum() | LogicalSta() )
+|   ( <DECREMENT> | <INCREMENT> )
 }
 
-void IncrementalExpression() :
-{ }
+void IncrementalExpression() : {} 
 {
     VarAssignOrInc()
-  | ( <DECREMENT> | <INCREMENT> ) <Ident>
+|   ( <DECREMENT> | <INCREMENT> ) <Ident>
 }
 
-/* Usada também na escolha de statements */
-void atributeVar() : {} {
-    VarAssignOrInc()
-}
-
-/* Declaração de inicialização de variável */
-void initVar() :
-{ }
+//
+// Declarações de membros da classe
+//
+// Unifica o tipo e o identificador e usa LOOKAHEAD para decidir se
+// trata-se de um método (se vier "(") ou de um campo.
+void MemberDeclaration() : {} 
 {
-      <Int> <Ident> ( "=" MathSta() )?
-  |   <Bool> <Ident> ( "=" LogicalSta() )?
-  |   <String> <Ident> ( "=" "\"" ( <CHAR> )* "\"" )?
+    ( <Int> | <Bool> | <String> | <Float> )
+    <Ident>
+    (
+        LOOKAHEAD("(")
+            MethodDeclarationRest()
+      |
+            FieldDeclarationRest()
+    )
+}
+
+/* Declaração de campo */
+void FieldDeclarationRest() : {} 
+{
+    ( "=" ( sum() | LogicalSta() | <StringLiteralToken> ) )? ";"
 }
 
 /* Declaração de método */
-void Method() :
-{ }
+void MethodDeclarationRest() : {} 
 {
-    ( <AccessMod> )?
-    ( <Int> | <Float> | <String> | <Bool> )
-    <Ident> "("
-    ( ( <Int> | <Float> | <String> | <Bool> ) <Ident> ( "[]" )* )*
-    ")"
+    "(" ParameterList() ")" 
     "{"
-        (
-          stra())*
+        ( Statement() )*
+        ReturnStatement()
     "}"
 }
 
-/* Expressão if */
-void IfExpression() :
-{ }
+/* Lista de parâmetros */
+void ParameterList() : {} 
 {
-    <If> "(" LogicalSta() ")" "{" stra() "}"
-    ( <Else> "{" stra() "}" )?
+    ( ( <Int> | <Bool> | <String> | <Float> ) <Ident> ( "[]" )* 
+      ( "," ( <Int> | <Bool> | <String> | <Float> ) <Ident> ( "[]" )* )* )?
 }
 
-/* Expressão for */
-void ForExpression() :
-{ }
+/* Declaração de retorno */
+void ReturnStatement() : {} 
 {
-    <For> "(" initVar() ";" ( <Ident> <LogicalMathOperator> ( <Ident> | <CONSTANT> ) )? ";" ( IncrementalExpression() )? ")" "{"
-         ( stra() )?
-    "}"
+    <Return>
+    ( sum() | LogicalSta() | <StringLiteralToken> )
+    ";"
 }
 
-/* Expressão while */
-void WhileExpretion() :
-{ }
+//
+// Declarações locais em métodos
+//
+void LocalDeclaration() : {} 
 {
-    <While> "(" LogicalSta() ")" "{" ( stra() )? "}"
+    ( <Int> | <Bool> | <String> | <Float> )
+    <Ident>
+    LocalDeclarationRest()
 }
 
-/* Declaração de propriedade */
-void prop() :
-{ }
+void LocalDeclarationRest() : {} 
 {
-    ( <AccessMod> )? ( <Int> | <Float> | <String> | <Bool> ) <Ident>
+    ( "=" ( sum() | LogicalSta() | <StringLiteralToken> ) )? ";"
 }
 
-/* Estrutura de classe */
-void ClassStruct() :
-{ }
+//
+// Instruções (Statements)
+//
+void Statement() : {} 
 {
-    ( <AccessMod> )? <Class> <Ident> ( <Extends> <Ident> )?
+    ( VarAssignOrInc() ";" 
+    | LocalDeclaration()
+    | IfExpression() 
+    | ForExpression() 
+    | WhileExpretion() )
+}
+
+//
+// Estruturas de controle
+//
+void IfExpression() : {} 
+{
+    <If> "(" LogicalSta() ")" "{" ( Statement() )* "}"
+    ( <Else> "{" ( Statement() )* "}" )?
+}
+
+void ForExpression() : {} 
+{
+    <For> "(" LocalDeclaration() 
+    ( <Ident> <LogicalMathOperator> ( <Ident> | <CONSTANT> ) )? ";" 
+    ( IncrementalExpression() )? ")" 
+    "{" ( Statement() )* "}"
+}
+
+void WhileExpretion() : {} 
+{
+    <While> "(" LogicalSta() ")" "{" ( Statement() )* "}"
+}
+
+//
+// Estrutura de classe
+//
+void ClassStruct() : {} 
+{
+    ( <AccessMod> )? <Class> <Ident>
+    ( <Extends> <Ident> )?
     ( <Implements> <Ident> ( "," <Ident> )* )?
     "{"
-       ( Method() )*
+        ( MemberDeclaration() )*
     "}"
+    [ <EOF> ]
 }
-
-/* Statements (statement único ou composto) */
-void stra() :
-{ }
-{
-    ( 
-        VarAssignOrInc() 
-      | initVar() 
-      | ( <DECREMENT> | <INCREMENT> ) <Ident> 
-      | IfExpression() 
-      | ForExpression() 
-      | WhileExpretion()
-    ) ";"
-}
-
-
-void panicSync() :
-{ }
-{
-    LOOKAHEAD(1)
-    (
-        <Ident> | <CONSTANT> | ";" | "{" | "}"
-    ) // Avança até um ponto seguro
-}
-

@@ -1,0 +1,9 @@
+public class Test {
+    int x = 10;
+    bool flag = true;
+    
+    int soma(int a, int b) {
+        int result = a + ;  // Erro: expressão incompleta após o operador +
+        return result;
+    }
+}

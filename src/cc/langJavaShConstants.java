@@ -72,6 +72,8 @@ public interface langJavaShConstants {
   int Ident = 34;
   /** RegularExpression Id. */
   int CHAR = 35;
+  /** RegularExpression Id. */
+  int StringLiteralToken = 36;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -114,13 +116,13 @@ public interface langJavaShConstants {
     "\"class\"",
     "<Ident>",
     "<CHAR>",
+    "<StringLiteralToken>",
     "\"(\"",
     "\")\"",
-    "\"\\\"\"",
-    "\"[]\"",
+    "\";\"",
     "\"{\"",
     "\"}\"",
-    "\";\"",
+    "\"[]\"",
     "\",\"",
   };
 
